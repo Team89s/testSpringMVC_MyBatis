@@ -15,6 +15,7 @@
     <!-- 自定义别名:扫描指定包下的实体类，给这些类取别名，默认是它的类名或者类名首字母小写 -->
     <typeAliases>
         <package name="com.igeek.ssm.pojo"/>
+        <package name="com.igeek.ssm.vo"/>
     </typeAliases>
     
 </configuration>
