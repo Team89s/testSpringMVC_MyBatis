@@ -42,6 +42,7 @@
             <td>商品名称</td>
             <td>商品价格</td>
             <td>生产日期</td>
+            <td>商品图片</td>
             <td>商品描述</td>
             <td>操作</td>
         </tr>
@@ -51,6 +52,12 @@
                 <td>${item.name }</td>
                 <td>${item.price }</td>
                 <td><fmt:formatDate value="${item.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                <td>
+                    <c:if test="${item.pic !=null}">
+                        <img src="${item.pic}" width=100 height=100/>
+                        <br/>
+                    </c:if>
+                </td>
                 <td>${item.detail }</td>
                 <td><a href="${pageContext.request.contextPath}/items/queryItems.action?id=${item.id}">修改</a></td>
             </tr>

@@ -55,4 +55,16 @@
         <property name="cacheSeconds" value="120" />
     </bean>
 
+    <!-- 配置自定义的全局异常处理器 -->
+    <!--<bean class="com.igeek.ssm.exception.MyHandlerExceptionResolver"></bean>-->
+
+    <!-- 文件上传，配置multipart类型解析器 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为5MB -->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+    </bean>
+
 </beans>

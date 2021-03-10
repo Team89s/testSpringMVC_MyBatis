@@ -1,5 +1,6 @@
 package com.igeek.ssm.controller;
 
+import com.igeek.ssm.exception.CustomException;
 import com.igeek.ssm.pojo.Items;
 import com.igeek.ssm.pojo.ItemsCustom;
 import com.igeek.ssm.service.ItemsService;
@@ -15,12 +16,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 //窄化请求映射
@@ -71,10 +77,14 @@ public class ItemsController {
      * @RequestParam(value = "id",required = true)  确保请求域中的key与value的值一致，完成参数绑定，required一旦为true，绑定不成功则直接报错
      */
     @RequestMapping(value = "/queryItems.action")
-    public String queryItems(Integer id, Model model){
+    public String queryItems(Integer id, Model model) throws CustomException {
         Items items = itemsService.selectOne(id);
         //传递数据至页面
         model.addAttribute("items",items);
+
+        //数学异常，测试了非自定义的异常情况
+        //int i = 10/0;
+
         //返回的逻辑视图名
         return "editItem.jsp";
     }
@@ -90,16 +100,20 @@ public class ItemsController {
      * 1.SpringMVC 自带回显功能，要求页面中${key}的Key必须是pojo的类名首字母小写
      * 2.model.addAttribute("item",items); 再次添加至请求域中
      * 3.@ModelAttribute("item") 通过注解，再次添加至请求域中，与页面中${key}的key保持一致
+     *
+     * 文件上传
+     * MultipartFile pictureFile，为了形成参数绑定，要求形参的名称必须与input中type为file的name是一致的
      */
     @RequestMapping("/updateItems.action")
     public String updateItems(@Validated(value = {ValidateGroup1.class}) /*@ModelAttribute("item")*/ Items items ,
                               BindingResult bindingResult ,
-                              Model model
-                             /*,Integer id,HttpServletRequest request*/){
+                              Model model,
+                              MultipartFile pictureFile
+                             /*,Integer id,HttpServletRequest request*/) throws IOException {
         //request.setAttribute("id",id);
 
         //获取到校验信息，若存在错误，则显示到页面展示
-        if(bindingResult!=null){
+        if(bindingResult!=null && bindingResult.hasErrors()){
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             for (ObjectError allError : allErrors) {
                 System.out.println("错误信息："+allError.getDefaultMessage());
@@ -112,6 +126,23 @@ public class ItemsController {
         }
 
 
+        //上传
+        if(pictureFile!=null){
+            String oldName = pictureFile.getOriginalFilename();
+            System.out.println("oldName = "+oldName);
+            //真正上传图片
+            if(oldName!=null && oldName.indexOf(".")>0){
+                String newName = UUID.randomUUID()+oldName.substring(oldName.lastIndexOf("."));
+
+                //将图片存储到服务器上  E:\8.SSM\temp
+                pictureFile.transferTo(new File("E:\\8.SSM\\temp\\"+newName));
+
+                //将图片给商品传入
+                items.setPic("/pic/"+newName);
+            }
+        }
+
+        //更新
         itemsService.update(items);
         /**
          * 响应重定向和请求转发的区别？

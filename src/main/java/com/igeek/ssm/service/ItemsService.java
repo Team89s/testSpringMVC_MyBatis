@@ -2,6 +2,7 @@ package com.igeek.ssm.service;
 
 import com.igeek.ssm.dao.ItemsCustomMapper;
 import com.igeek.ssm.dao.ItemsMapper;
+import com.igeek.ssm.exception.CustomException;
 import com.igeek.ssm.pojo.Items;
 import com.igeek.ssm.pojo.ItemsCustom;
 import com.igeek.ssm.vo.ItemsQueryVO;
@@ -29,8 +30,11 @@ public class ItemsService {
 
     //查询单个商品
     @Transactional(readOnly = true)
-    public Items selectOne(Integer id){
+    public Items selectOne(Integer id) throws CustomException {
         Items items = itemsMapper.selectByPrimaryKey(id);
+        if(items==null){
+            throw new CustomException("未找到匹配的商品");
+        }
         return items;
     }
 
