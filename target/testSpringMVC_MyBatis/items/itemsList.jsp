@@ -16,6 +16,13 @@
     </script>
 </head>
 <body>
+
+<select>
+    <c:forEach items="${getKey}" var="map">
+        <option value="${map.key}">${map.value}</option>
+    </c:forEach>
+</select>
+
 <form id="f" action="${pageContext.request.contextPath }/items/findItemsList.action" method="post">
     查询条件：
     <table width="100%" border=1>

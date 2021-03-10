@@ -3,17 +3,24 @@ package com.igeek.ssm.controller;
 import com.igeek.ssm.pojo.Items;
 import com.igeek.ssm.pojo.ItemsCustom;
 import com.igeek.ssm.service.ItemsService;
+import com.igeek.ssm.validate.ValidateGroup1;
 import com.igeek.ssm.vo.ItemsQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 //窄化请求映射
@@ -22,6 +29,23 @@ public class ItemsController {
 
     @Autowired
     private ItemsService itemsService;
+
+    /**
+     * 使用@ModelAttribute("key")注解，在请求域中存储方法的返回值，在页面中${key}使用
+     *
+     * 相当于：
+     * request.setAttribute("key",value);
+     * request.getAttribute("key"); --->  ${key}
+     * @return
+     */
+    @ModelAttribute("getMap")
+    public Map<String,String> get(){
+        Map<String,String> map = new HashMap<>();
+        map.put("1","鼠标");
+        map.put("2","键盘");
+        map.put("3","风扇");
+        return map;
+    }
 
     //查询商品列表
     @RequestMapping("/queryItemsList.action")
@@ -39,7 +63,7 @@ public class ItemsController {
 
     /**
      * 查询单个商品
-     * @param id 单个值参数绑定：页面中请求参数传递至controller中时，要求请求参数的key必须与形参名称一致
+     * @param id 简单类型的参数绑定：页面中请求参数传递至controller中时，要求请求参数的key必须与形参名称一致
      * @param model：直接传递数据至页面上
      * @return String 返回的是逻辑视图名
      *
@@ -47,10 +71,10 @@ public class ItemsController {
      * @RequestParam(value = "id",required = true)  确保请求域中的key与value的值一致，完成参数绑定，required一旦为true，绑定不成功则直接报错
      */
     @RequestMapping(value = "/queryItems.action")
-    public String queryItems( Integer id, Model model){
+    public String queryItems(Integer id, Model model){
         Items items = itemsService.selectOne(id);
         //传递数据至页面
-        model.addAttribute("item",items);
+        model.addAttribute("items",items);
         //返回的逻辑视图名
         return "editItem.jsp";
     }
@@ -58,10 +82,36 @@ public class ItemsController {
     /**
      * 修改商品
      * @param items  pojo类型的参数绑定：form表单中input的name必须与想要绑定的pojo中属性名一致
+     *
+     * @Validated Items items , BindingResult bindingResult  完成校验当前商品信息
+     * @Validated(value = ValidateGroup1.class) 当前支持校验分组1中的校验规则
+     *
+     * 回显功能
+     * 1.SpringMVC 自带回显功能，要求页面中${key}的Key必须是pojo的类名首字母小写
+     * 2.model.addAttribute("item",items); 再次添加至请求域中
+     * 3.@ModelAttribute("item") 通过注解，再次添加至请求域中，与页面中${key}的key保持一致
      */
     @RequestMapping("/updateItems.action")
-    public String updateItems(Items items /*,Integer id,HttpServletRequest request*/){
+    public String updateItems(@Validated(value = {ValidateGroup1.class}) /*@ModelAttribute("item")*/ Items items ,
+                              BindingResult bindingResult ,
+                              Model model
+                             /*,Integer id,HttpServletRequest request*/){
         //request.setAttribute("id",id);
+
+        //获取到校验信息，若存在错误，则显示到页面展示
+        if(bindingResult!=null){
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            for (ObjectError allError : allErrors) {
+                System.out.println("错误信息："+allError.getDefaultMessage());
+            }
+            model.addAttribute("allErrors",allErrors);
+
+            //失败  数据回显
+            // model.addAttribute("item",items);
+            return "editItem.jsp";
+        }
+
+
         itemsService.update(items);
         /**
          * 响应重定向和请求转发的区别？
@@ -77,8 +127,6 @@ public class ItemsController {
 
         //请求转发
         //return "forward:queryItemsList.action";
-
-        //失败  数据回显 ？
     }
 
     /**
@@ -103,7 +151,7 @@ public class ItemsController {
     }
 
     /**
-     * 进入批量修改页面
+     * 进入批量修改页面 editItemsList
      */
     @RequestMapping("/editItemsList.action")
     public String editItemsList(Model model){
@@ -113,7 +161,17 @@ public class ItemsController {
     }
 
     /**
-     * 批量修改
+     * 进入批量修改页面 editItemsMap
+     */
+    @RequestMapping("/editItemsMap.action")
+    public String editItemsMap(Model model){
+        List<Items> itemsList = itemsService.selectList();
+        model.addAttribute("itemsList",itemsList);
+        return "editItemsMap.jsp";
+    }
+
+    /**
+     * 批量修改  List
      * 集合List的参数绑定：包装的pojo中关联的集合，与页面中input的name一致 itemsCustomList[下标].属性
      */
     @RequestMapping("/updateAll.action")
@@ -122,4 +180,16 @@ public class ItemsController {
         itemsService.updateAll(itemsCustomList);
         return "redirect:queryItemsList.action";
     }
+
+    /**
+     * 批量修改  Map
+     * 集合Map的参数绑定：包装的pojo中关联的集合，与页面中input的name一致 map[下标].属性
+     */
+    @RequestMapping("/updateAllMap.action")
+    public String updateAllMap(ItemsQueryVO vo){
+        Map<String, ItemsCustom> map = vo.getMap();
+        itemsService.updateAllMap(map);
+        return "redirect:queryItemsList.action";
+    }
+
 }

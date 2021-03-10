@@ -3,6 +3,7 @@ package com.igeek.ssm.vo;
 import com.igeek.ssm.pojo.ItemsCustom;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @version 1.0
@@ -18,12 +19,17 @@ public class ItemsQueryVO {
     //批量更新商品的信息
     private List<ItemsCustom> itemsCustomList;
 
+    //批量更新商品的信息
+    private Map<String,ItemsCustom> map;
+
+
     public ItemsQueryVO() {
     }
 
-    public ItemsQueryVO(ItemsCustom itemsCustom, List<ItemsCustom> itemsCustomList) {
+    public ItemsQueryVO(ItemsCustom itemsCustom, List<ItemsCustom> itemsCustomList, Map<String, ItemsCustom> map) {
         this.itemsCustom = itemsCustom;
         this.itemsCustomList = itemsCustomList;
+        this.map = map;
     }
 
     /**
@@ -58,7 +64,23 @@ public class ItemsQueryVO {
         this.itemsCustomList = itemsCustomList;
     }
 
+    /**
+     * 获取
+     * @return map
+     */
+    public Map<String, ItemsCustom> getMap() {
+        return map;
+    }
+
+    /**
+     * 设置
+     * @param map
+     */
+    public void setMap(Map<String, ItemsCustom> map) {
+        this.map = map;
+    }
+
     public String toString() {
-        return "ItemsQueryVO{itemsCustom = " + itemsCustom + ", itemsCustomList = " + itemsCustomList + "}";
+        return "ItemsQueryVO{itemsCustom = " + itemsCustom + ", itemsCustomList = " + itemsCustomList + ", map = " + map + "}";
     }
 }

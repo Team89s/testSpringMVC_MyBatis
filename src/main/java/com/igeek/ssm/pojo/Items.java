@@ -1,12 +1,17 @@
 package com.igeek.ssm.pojo;
 
+import com.igeek.ssm.validate.ValidateGroup1;
+import com.igeek.ssm.validate.ValidateGroup2;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class Items {
     private Integer id;
 
+    @Size(min=2,max=6,message = "{items.name.length}",groups = ValidateGroup1.class)
     private String name;
 
     private Float price;
@@ -14,6 +19,7 @@ public class Items {
     private String pic;
 
     //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "{items.createtime.notnull}",groups = ValidateGroup2.class)
     private Date createtime;
 
     private String detail;

@@ -9,23 +9,29 @@
     <title>修改商品信息</title>
 </head>
 <body>
+
+<%-- 展示校验错误信息 --%>
+<c:forEach items="${allErrors}" var="error">
+    <font color="red">${error.defaultMessage}</font><br/>
+</c:forEach>
+
 <%-- enctype="multipart/form-data" --%>
 <form id="itemForm" action="${pageContext.request.contextPath}/items/updateItems.action" method="post">
-    <input type="hidden" name="id" value="${item.id}"/>
+    <input type="hidden" name="id" value="${items.id}"/>
     修改商品信息：
     <table width="100%" border=1>
         <tr>
             <td>商品名称</td>
-            <td><input type="text" name="name" value="${item.name}"/></td>
+            <td><input type="text" name="name" value="${items.name}"/></td>
         </tr>
         <tr>
             <td>商品价格</td>
-            <td><input type="text" name="price" value="${item.price}"/></td>
+            <td><input type="text" name="price" value="${items.price}"/></td>
         </tr>
         <tr>
             <td>商品生产日期</td>
             <td><input type="text" name="createtime"
-                       value="<fmt:formatDate value="${item.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"/></td>
+                       value="<fmt:formatDate value="${items.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"/></td>
         </tr>
         <%--<tr>
             <td>商品图片</td>
@@ -40,7 +46,7 @@
         <tr>
             <td>商品简介</td>
             <td>
-                <textarea rows="3" cols="30" name="detail">${item.detail }</textarea>
+                <textarea rows="3" cols="30" name="detail">${items.detail }</textarea>
             </td>
         </tr>
         <tr>

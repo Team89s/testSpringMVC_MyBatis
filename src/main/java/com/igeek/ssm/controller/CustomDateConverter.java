@@ -15,13 +15,15 @@ import java.util.Date;
 public class CustomDateConverter implements Converter<String, Date> {
     @Override
     public Date convert(String s) {
-        //将String -->  Date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
-        try {
-            date = sdf.parse(s);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(s!=null && !s.equals("")){
+            //将String -->  Date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                date = sdf.parse(s);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return date;
     }

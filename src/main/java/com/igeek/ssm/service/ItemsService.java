@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ItemsService {
@@ -51,10 +52,17 @@ public class ItemsService {
         }
     }
 
-    //批量修改
+    //批量修改  List
     public void updateAll(List<ItemsCustom> itemsList){
         for (ItemsCustom itemsCustom : itemsList) {
             itemsMapper.updateByPrimaryKeySelective(itemsCustom);
+        }
+    }
+
+    //批量修改  Map
+    public void updateAllMap(Map<String, ItemsCustom> map) {
+        for (String key : map.keySet()) {
+            itemsMapper.updateByPrimaryKeySelective(map.get(key));
         }
     }
 }
