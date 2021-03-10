@@ -10,6 +10,13 @@
 </head>
 <body>
 
+<select>
+    <c:forEach items="${getMap}" var="map">
+        <option value="${map.key}">${map.value}</option>
+    </c:forEach>
+</select>
+
+
 <%-- 展示校验错误信息 --%>
 <c:forEach items="${allErrors}" var="error">
     <font color="red">${error.defaultMessage}</font><br/>

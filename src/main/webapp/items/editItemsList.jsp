@@ -10,7 +10,7 @@
     <script src="../js/jquery-1.11.0.min.js"></script>
     <script>
         function updateAll() {
-            $("#f").attr("action","/items/updateAll.action");
+            $("#f").attr("action","${pageContext.request.contextPath }/items/updateAll.action");
             $("#f").submit();
         }
     </script>

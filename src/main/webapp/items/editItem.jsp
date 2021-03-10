@@ -9,7 +9,6 @@
     <title>修改商品信息</title>
 </head>
 <body>
-
 <%-- 展示校验错误信息 --%>
 <c:forEach items="${allErrors}" var="error">
     <font color="red">${error.defaultMessage}</font><br/>

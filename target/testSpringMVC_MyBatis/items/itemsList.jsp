@@ -17,8 +17,9 @@
 </head>
 <body>
 
+<%-- 测试@ModelAttribute("getMap")注解 --%>
 <select>
-    <c:forEach items="${getKey}" var="map">
+    <c:forEach items="${getMap}" var="map">
         <option value="${map.key}">${map.value}</option>
     </c:forEach>
 </select>
