@@ -20,8 +20,30 @@
             <param-value>utf-8</param-value>
         </init-param>
     </filter>
+
+    <!-- 对PUT提交方式放行 -->
+    <!--<filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>-->
+
+    <!-- JSP中隐藏的_method生效 -->
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+
+
     <filter-mapping>
         <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--<filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
@@ -42,6 +64,8 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.action</url-pattern>
+        <!-- 对静态资源也会处理 -->
+        <url-pattern>/</url-pattern>
+        <!--<url-pattern>*.action</url-pattern>-->
     </servlet-mapping>
 </web-app>

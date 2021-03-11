@@ -8,9 +8,10 @@
     <!-- 添加扫描包，让注解生效 -->
     <context:component-scan base-package="com.igeek.ssm.controller , com.igeek.ssm.service"></context:component-scan>
 
+    <!-- conversion-service="conversionService" -->
     <!-- 配置处理器映射器、处理器适配器 -->
     <!-- 校验器注入到处理器适配器中 -->
-    <mvc:annotation-driven conversion-service="conversionService"
+    <mvc:annotation-driven
         validator="validator"></mvc:annotation-driven>
 
     <!-- 配置视图解析器 -->
@@ -20,16 +21,16 @@
     </bean>-->
 
     <!-- 自定义参数绑定 -->
-    <bean id="conversionService"
+    <!--<bean id="conversionService"
           class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <!-- 转换器 -->
+        &lt;!&ndash; 转换器 &ndash;&gt;
         <property name="converters">
             <list>
-                <!-- 日期类型转换 -->
+                &lt;!&ndash; 日期类型转换 &ndash;&gt;
                 <bean class="com.igeek.ssm.controller.CustomDateConverter"></bean>
             </list>
         </property>
-    </bean>
+    </bean>-->
 
     <!-- 校验器：spring提供的一个校验的接口LocalValidatorFactoryBean -->
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -66,5 +67,13 @@
             <value>5242880</value>
         </property>
     </bean>
+
+    <!-- 对静态资源放行 -->
+    <mvc:default-servlet-handler />
+
+    <!-- 静态资源解析，包括：js、css、img等资源 -->
+    <!--<mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/img/" mapping="/img/**"/>-->
 
 </beans>

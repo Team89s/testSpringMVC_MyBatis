@@ -93,6 +93,7 @@ public class ItemsController {
      * 修改商品
      * @param items  pojo类型的参数绑定：form表单中input的name必须与想要绑定的pojo中属性名一致
      *
+     * 校验
      * @Validated Items items , BindingResult bindingResult  完成校验当前商品信息
      * @Validated(value = ValidateGroup1.class) 当前支持校验分组1中的校验规则
      *

@@ -18,7 +18,7 @@ public class Items {
 
     private String pic;
 
-    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "{items.createtime.notnull}",groups = ValidateGroup2.class)
     private Date createtime;
 

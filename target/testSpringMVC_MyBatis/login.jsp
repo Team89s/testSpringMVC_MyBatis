@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,7 +28,7 @@
 </form> --%>
 
 
-<form class="loginForm" action="${pageContext.request.contextPath }/login.action" method="post"> 
+<form class="loginForm" action="${pageContext.request.contextPath }/userLogin.action" method="post">
 	<table border="1px" cellspacing="0" cellpadding="10px" align="center">
 		<tr>
 			<td colspan="2" align="center"><h1>登陆页面</h1></td>
@@ -37,7 +37,7 @@
 			<td>username</td><td><input type="text" name="username"/></td>
 		</tr>
 		<tr>
-			<td>password</td><td><input type="password" name="password"/></td>
+			<td>address</td><td><input type="text" name="address"/></td>
 		</tr>
 		<tr>
 			<td colspan="2" align="center">
