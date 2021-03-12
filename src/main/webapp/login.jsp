@@ -27,8 +27,8 @@
 	</table>
 </form> --%>
 
-
-<form class="loginForm" action="${pageContext.request.contextPath }/userLogin.action" method="post">
+<%--  测试json数据，action是${pageContext.request.contextPath }/userLogin.action --%>
+<form class="loginForm" action="${pageContext.request.contextPath }/login" method="get">
 	<table border="1px" cellspacing="0" cellpadding="10px" align="center">
 		<tr>
 			<td colspan="2" align="center"><h1>登陆页面</h1></td>

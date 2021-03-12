@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -64,5 +65,25 @@ public class UserRestController {
     public String updateUser(User user){
         userService.updateUser(user);
         return "redirect:users";
+    }
+
+
+    //登录
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String login(User user , HttpSession session){
+        user = userService.login(user.getUsername(), user.getAddress());
+        if (user!=null) {
+            //登录成功
+            session.setAttribute("user",user);
+            return "success.jsp";
+        }
+        return "login.jsp";
+    }
+
+    //登出
+    @RequestMapping(value = "/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "login.jsp";
     }
 }
