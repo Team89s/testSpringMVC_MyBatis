@@ -1,6 +1,7 @@
 package com.igeek.ssm.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HelloController {
 
     @RequestMapping("/hello")
-    public @ResponseBody String hello(){
-        return "hello world!!!";
+    //@ResponseBody  "hello world!!!"
+    public String hello(Model model){
+        model.addAttribute("hello","hello");
+        System.out.println("HelloController 执行了");
+        return "success.jsp";
     }
 }
